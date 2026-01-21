@@ -60,7 +60,7 @@ boundaryField
         mixingLength    1.03e-3;   
         phi             phi;
         k               k;
-        value           $internalField;
+        value           uniform 77.13;  //$internalField;
     }
     vent_lower
     {

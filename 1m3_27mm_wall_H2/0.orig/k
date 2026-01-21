@@ -58,7 +58,7 @@ boundaryField
     {
         type            turbulentIntensityKineticEnergyInlet;
         intensity       0.1;  //turbulent intensity
-        value           $internalField;
+        value           uniform 0.6144;  //$internalField;
     }
     vent_lower
     {
