@@ -1,0 +1,78 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2406                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    object      epsilon;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 2 -3 0 0 0 0];
+
+internalField   uniform 2.76e-6;
+
+boundaryField
+{
+    left
+    {
+        type            symmetryPlane;
+    }
+    right
+    {
+        type            epsilonWallFunction;
+        value           $internalField;
+    }
+    front
+    {
+        type            epsilonWallFunction;
+        value           $internalField;
+    }
+    back
+    {
+        type            epsilonWallFunction;
+        value           $internalField;
+    }
+    bottom_wall
+    {
+        type            epsilonWallFunction;
+        value           $internalField;
+    }
+    top
+    {
+        type            epsilonWallFunction;
+        value           $internalField;
+    }
+    nozzle_27mm_5mm_m
+    {
+        type            epsilonWallFunction;
+        value           $internalField;
+    }
+    nozzle
+    {
+        type            turbulentMixingLengthDissipationRateInlet;
+        mixingLength    1.03e-3;   
+        phi             phi;
+        k               k;
+        value           uniform 77.13; //$internalField;
+    }
+    vent_lower
+    {
+        type            inletOutlet;
+        inletValue      $internalField;
+        value           $internalField; //placeholder
+    }
+    vent_upper
+    {
+        type            inletOutlet;
+        inletValue      $internalField;
+        value           $internalField; //placeholder
+    }
+}
+// ************************************************************************* //

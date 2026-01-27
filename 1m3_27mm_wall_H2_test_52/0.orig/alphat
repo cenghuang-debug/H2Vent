@@ -1,0 +1,79 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2406                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    object      alphat;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [1 -1 -1 0 0 0 0];
+
+internalField   uniform 6.66e-5; // Initially zero, turbulence model will compute
+
+boundaryField
+{
+    left
+    {
+        type            symmetryPlane;
+    }
+    right
+    {
+        type            compressible::alphatWallFunction;
+        Prt             0.85;
+        value           $internalField;        
+    }
+    front
+    {
+        type            compressible::alphatWallFunction;
+        Prt             0.85;
+        value           $internalField;        
+    }
+    back
+    {
+        type            compressible::alphatWallFunction;
+        Prt             0.85;
+        value           $internalField;        
+    }
+    bottom_wall
+    {
+        type            compressible::alphatWallFunction;
+        Prt             0.85;
+        value           $internalField;        
+    }
+    top
+    {
+        type            compressible::alphatWallFunction;
+        Prt             0.85;
+        value           $internalField;        
+    }
+    nozzle_27mm_5mm_m
+    {
+        type            compressible::alphatWallFunction;
+        Prt             0.85;
+        value           $internalField;        
+    }
+    nozzle
+    {
+        type            calculated;
+        value           $internalField;
+    }
+    vent_lower
+    {
+        type            calculated;
+        value           $internalField;
+    }
+    vent_upper
+    {
+        type            calculated;
+        value           $internalField;
+    }
+}
+// ************************************************************************* //

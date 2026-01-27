@@ -1,0 +1,28 @@
+#!/bin/sh
+
+#cd ${0%/*} || exit 1                        # Run from this directory
+. $WM_PROJECT_DIR/bin/tools/RunFunctions    # Tutorial run functions
+
+#cp \
+#    $FOAM_TUTORIALS/resources/geometry/membrane-boundaries.stl.gz \
+#    $FOAM_TUTORIALS/resources/geometry/membrane-membrane.stl.gz \
+#    constant/triSurface
+cp -r 0.orig/ 0/
+runApplication surfaceFeatureExtract
+runApplication blockMesh
+runApplication snappyHexMesh -overwrite
+rm 0/cellLevel 0/pointLevel
+runApplication topoSet 
+runApplication createPatch -overwrite
+runApplication checkMesh
+runApplication renumberMesh -overwrite
+runApplication potentialFoam #set initial U filed
+#replace the gamma 
+#sed -i '38s/gamma           1;/gamma           1.4;/' 0/p
+#restore0Dir
+
+#runApplication setFields
+
+#runApplication reactingFoam
+
+#------------------------------------------------------------------------------

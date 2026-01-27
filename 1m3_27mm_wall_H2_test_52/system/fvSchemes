@@ -1,0 +1,71 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v1812                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      fvSchemes;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+ddtSchemes
+{
+    default         Euler;  //CrankNicolson 0.9;
+}
+
+gradSchemes
+{
+    default    cellLimited Gauss linear 1.0; // cellMDLimited; Gauss linear;
+    grad(U)    cellLimited Gauss linear 1.0;                                                  
+}
+
+divSchemes
+{
+    default         none;
+
+    div(phi,U)        Gauss upwind; //limitedLinearV 1;
+    div(phi,Yi_h)     Gauss multivariateSelection //Gauss limitedLinear 1;
+    {
+        H2   upwind; //limitedLinear01 1;  
+        O2   upwind; //limitedLinear01 1;
+        air  upwind; //limitedLinear01 1;
+        H2O  upwind; //limitedLinear01 1;
+        N2   upwind; //limitedLinear01 1;
+        h    upwind; //limitedLinear 1 ;
+    };
+    div(phi,K)        Gauss upwind; //limitedLinear 1;
+    div(phid,p)       Gauss upwind; //limitedLinear 1;
+    div(phi,epsilon)  Gauss upwind; //limitedLinear 1;
+    div(phi,k)        Gauss upwind; //limitedLinear 1;
+    div(((rho*nuEff)*dev2(T(grad(U))))) Gauss linear;
+}
+
+laplacianSchemes
+{
+    default         Gauss linear corrected; //Gauss linear limited 1.0;
+}
+
+interpolationSchemes
+{
+    default         linear;
+}
+
+snGradSchemes
+{
+    default         corrected; //limited 1.0;
+}
+
+fluxRequired
+{
+    p_rgh;
+}
+
+
+// ************************************************************************* //

@@ -1,0 +1,90 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2406                                  |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      binary;
+    arch        "LSB;label=32;scalar=64";
+    class       polyBoundaryMesh;
+    location    "constant/polyMesh";
+    object      boundary;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+10
+(
+    left
+    {
+        type            symmetryPlane;
+        inGroups        1(symmetryPlane);
+        nFaces          13358;
+        startFace       1633979;
+    }
+    right
+    {
+        type            wall;
+        inGroups        1(wall);
+        nFaces          2500;
+        startFace       1647337;
+    }
+    top
+    {
+        type            wall;
+        inGroups        1(wall);
+        nFaces          1250;
+        startFace       1649837;
+    }
+    front
+    {
+        type            wall;
+        inGroups        1(wall);
+        nFaces          1034;
+        startFace       1651087;
+    }
+    back
+    {
+        type            wall;
+        inGroups        1(wall);
+        nFaces          1034;
+        startFace       1652121;
+    }
+    nozzle_27mm_5mm_m
+    {
+        type            wall;
+        inGroups        1(wall);
+        nFaces          1194;
+        startFace       1653155;
+    }
+    nozzle
+    {
+        type            patch;
+        nFaces          44;
+        startFace       1654349;
+    }
+    bottom_wall
+    {
+        type            wall;
+        inGroups        1(wall);
+        nFaces          6690;
+        startFace       1654393;
+    }
+    vent_lower
+    {
+        type            patch;
+        nFaces          216;
+        startFace       1661083;
+    }
+    vent_upper
+    {
+        type            patch;
+        nFaces          216;
+        startFace       1661299;
+    }
+)
+
+// ************************************************************************* //
