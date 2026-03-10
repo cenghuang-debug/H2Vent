@@ -1,0 +1,18 @@
+#!/bin/sh
+rm -rf 0
+rm -rf [1-2]
+rm -rf VTK
+rm -rf constant/extendedFeatureEdgeMesh/
+rm -rf postProcessing
+rm constant/triSurface/*.eMesh
+rm log.*
+
+
+#cd ${0%/*} || exit 1                        # Run from this directory
+#. $WM_PROJECT_DIR/bin/tools/CleanFunctions  # Tutorial clean functions
+
+#cleanCase0
+
+#rm constant/triSurface/membrane-*.stl.gz 2> /dev/null
+
+#------------------------------------------------------------------------------
