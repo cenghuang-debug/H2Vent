@@ -1,0 +1,48 @@
+#!/bin/bash -l
+
+#The name of the script is mytest
+#SBATCH -J H2_02
+
+# Set the allocation to be charged for this job
+#SBATCH -A naiss2025-22-1135
+
+# XX hour wall-clock time will be given to this job
+#SBATCH -t 24:00:00
+
+# Set the partition for your job. 
+#SBATCH -p main
+
+nodes=1            # Number of nodes
+cores=128          # Number of cores per node
+# Number of nodes
+#SBATCH --nodes=$nodes
+
+# Number of MPI processes per node (default 128)
+#SBATCH --ntasks-per-node=$cores
+
+# Load the openfoam module
+module load PDC
+module load openfoam/v2406
+
+# Set the openfoam environment variables
+. $FOAM_BASHRC
+
+# Change OpenFoam user directory to the project directory
+# Comment the three lines below if not running on the project directory
+# stand in the project dir, like naiss2024-5-347
+cd ~/naiss2024-5-347/
+WM_PROJECT_DIRECTORY2=$(pwd)
+export WM_PROJECT_USER_DIR=$WM_PROJECT_DIRECTORY2/$WM_PROJECT/$USER-$WM_PROJECT_VERSION
+export FOAM_RUN=$WM_PROJECT_USER_DIR/run
+
+# Decompose solution (serial)
+echo "DECOMPOSE MESH WITH decomposePar..."
+srun -n 1 decomposePar -case $FOAM_RUN/H2Vent/1m3_27mm_wall_H2_test_02 > $FOAM_RUN/H2Vent/1m3_27mm_wall_H2_test_02/log.decomposePar 2>&1
+
+#sed -i '/numberOfSubdomains/c\\numberOfSubdomains    $(($nodes*$cores));' system/decomposeParDict
+# Start the OpenFOAM job with $cores MPI-tasks on $nodes nodes
+echo "run case in parallel ..."
+srun -n $(($nodes*$cores)) -N $nodes rhoReactingBuoyantFoam -case $FOAM_RUN/H2Vent/1m3_27mm_wall_H2_test_02 -parallel > $FOAM_RUN/H2Vent/1m3_27mm_wall_H2_test_02/log.rhoReactingBuoyantFoam 2>&1
+
+echo "reconstruct mesh in serial ..."
+srun -n 1 reconstructPar -case $FOAM_RUN/H2Vent/1m3_27mm_wall_H2_test_02 > $FOAM_RUN/H2Vent/1m3_27mm_wall_H2_test_02/log.reconstructPar 2>&1

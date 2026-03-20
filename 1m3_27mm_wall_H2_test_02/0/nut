@@ -1,0 +1,72 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2406                                  |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      binary;
+    arch        "LSB;label=32;scalar=64";
+    class       volScalarField;
+    location    "0";
+    object      nut;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 2 -1 0 0 0 0];
+
+internalField   uniform 4.6e-05;
+
+boundaryField
+{
+    left
+    {
+        type            symmetryPlane;
+    }
+    right
+    {
+        type            calculated;
+        value           uniform 4.6e-05;
+    }
+    top
+    {
+        type            calculated;
+        value           uniform 4.6e-05;
+    }
+    front
+    {
+        type            calculated;
+        value           uniform 4.6e-05;
+    }
+    back
+    {
+        type            calculated;
+        value           uniform 4.6e-05;
+    }
+    nozzle_27mm_5mm_m
+    {
+        type            nutkWallFunction;
+        value           uniform 4.6e-05;
+    }
+    box_shell_m
+    {
+        type            nutkWallFunction;
+        value           uniform 4.6e-05;
+    }
+    nozzle
+    {
+        type            calculated;
+        value           uniform 4.6e-05;
+    }
+    bottom_wall
+    {
+        type            nutkWallFunction;
+        value           uniform 4.6e-05;
+    }
+}
+
+
+// ************************************************************************* //

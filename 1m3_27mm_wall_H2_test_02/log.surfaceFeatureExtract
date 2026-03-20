@@ -1,0 +1,139 @@
+/*---------------------------------------------------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2406                                  |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+Build  : _630d60de3b-20240620 OPENFOAM=2406 version=v2406
+Arch   : "LSB;label=32;scalar=64"
+Exec   : surfaceFeatureExtract
+Date   : Mar 18 2026
+Time   : 10:40:11
+Host   : RISEPC-MhOrpSuy
+PID    : 324291
+I/O    : uncollated
+Case   : /home/chenhu/OpenFOAM/chenhu-v2406/run/H2Vent/1m3_27mm_wall_H2_test_02
+nProcs : 1
+trapFpe: Floating point exception trapping enabled (FOAM_SIGFPE).
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 5, maxFileModificationPolls 20)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Create time
+
+
+Note: Feature line extraction only valid on closed manifold surfaces
+
+Reading surfaceFeatureExtractDict
+
+Surfaces     : nozzle_27mm_5mm_m.stl
+Output       : nozzle_27mm_5mm_m
+Load options : offset
+Write options: writeObj=yes writeVTK=off
+
+Statistics:
+Triangles    : 320 in 1 region(s)
+Vertices     : 160
+Bounding Box : (-0.0184506 -0.0184877 0) (0.0185 0.0184877 0.08)
+
+Constructing feature set from included angle 170
+Selecting edges based purely on geometric tests: no
+Removing all non-manifold edges (edges with > 2 connected faces) unless they cross multiple regions
+
+Initial Feature set:
+    points : 0
+    edges  : 160
+    of which
+        region edges   : 0
+        external edges : 160
+        internal edges : 0
+
+Final Feature set:
+    points : 160
+    of which
+        convex             : 0
+        concave            : 0
+        mixed              : 0
+        non-feature        : 160
+    edges  : 160
+    of which
+        external edges     : 160
+        internal edges     : 0
+        flat edges         : 0
+        open edges         : 0
+        multiply connected : 0
+
+Writing extendedFeatureEdgeMesh to "/home/chenhu/OpenFOAM/chenhu-v2406/run/H2Vent/1m3_27mm_wall_H2_test_02/constant/extendedFeatureEdgeMesh/nozzle_27mm_5mm_m.extendedFeatureEdgeMesh"
+
+Writing extendedEdgeMesh components to "/home/chenhu/OpenFOAM/chenhu-v2406/run/H2Vent/1m3_27mm_wall_H2_test_02/constant/extendedFeatureEdgeMesh/nozzle_27mm_5mm_m"
+Writing 0 convex feature points to "/home/chenhu/OpenFOAM/chenhu-v2406/run/H2Vent/1m3_27mm_wall_H2_test_02/constant/extendedFeatureEdgeMesh/nozzle_27mm_5mm_m_convexFeaturePts.obj"
+Writing 0 concave feature points to "/home/chenhu/OpenFOAM/chenhu-v2406/run/H2Vent/1m3_27mm_wall_H2_test_02/constant/extendedFeatureEdgeMesh/nozzle_27mm_5mm_m_concaveFeaturePts.obj"
+Writing 0 mixed feature points to "/home/chenhu/OpenFOAM/chenhu-v2406/run/H2Vent/1m3_27mm_wall_H2_test_02/constant/extendedFeatureEdgeMesh/nozzle_27mm_5mm_m_mixedFeaturePts.obj"
+Writing 0 mixed feature point structure to "/home/chenhu/OpenFOAM/chenhu-v2406/run/H2Vent/1m3_27mm_wall_H2_test_02/constant/extendedFeatureEdgeMesh/nozzle_27mm_5mm_m_mixedFeaturePtsStructure.obj"
+Writing 160 external edges to "/home/chenhu/OpenFOAM/chenhu-v2406/run/H2Vent/1m3_27mm_wall_H2_test_02/constant/extendedFeatureEdgeMesh/nozzle_27mm_5mm_m_externalEdges.obj"
+Writing 0 internal edges to "/home/chenhu/OpenFOAM/chenhu-v2406/run/H2Vent/1m3_27mm_wall_H2_test_02/constant/extendedFeatureEdgeMesh/nozzle_27mm_5mm_m_internalEdges.obj"
+Writing 0 flat edges to "/home/chenhu/OpenFOAM/chenhu-v2406/run/H2Vent/1m3_27mm_wall_H2_test_02/constant/extendedFeatureEdgeMesh/nozzle_27mm_5mm_m_flatEdges.obj"
+Writing 0 open edges to "/home/chenhu/OpenFOAM/chenhu-v2406/run/H2Vent/1m3_27mm_wall_H2_test_02/constant/extendedFeatureEdgeMesh/nozzle_27mm_5mm_m_openEdges.obj"
+Writing 0 multiple edges to "/home/chenhu/OpenFOAM/chenhu-v2406/run/H2Vent/1m3_27mm_wall_H2_test_02/constant/extendedFeatureEdgeMesh/nozzle_27mm_5mm_m_multipleEdges.obj"
+Writing 0 region edges to "/home/chenhu/OpenFOAM/chenhu-v2406/run/H2Vent/1m3_27mm_wall_H2_test_02/constant/extendedFeatureEdgeMesh/nozzle_27mm_5mm_m_regionEdges.obj"
+Writing 160 edge directions to "/home/chenhu/OpenFOAM/chenhu-v2406/run/H2Vent/1m3_27mm_wall_H2_test_02/constant/extendedFeatureEdgeMesh/nozzle_27mm_5mm_m_edgeDirections.obj"
+
+Writing featureEdgeMesh to "/home/chenhu/OpenFOAM/chenhu-v2406/run/H2Vent/1m3_27mm_wall_H2_test_02/constant/triSurface/nozzle_27mm_5mm_m.eMesh"
+Surfaces     : box_shell_m.stl
+Output       : box_shell_m
+Load options : offset
+Write options: writeObj=yes writeVTK=off
+
+Statistics:
+Triangles    : 64 in 1 region(s)
+Vertices     : 32
+Bounding Box : (-0.5075 -0.5075 0) (0.5075 0.5075 1.01)
+
+Constructing feature set from included angle 170
+Selecting edges based purely on geometric tests: no
+Removing all non-manifold edges (edges with > 2 connected faces) unless they cross multiple regions
+
+Initial Feature set:
+    points : 32
+    edges  : 48
+    of which
+        region edges   : 0
+        external edges : 33
+        internal edges : 15
+
+Final Feature set:
+    points : 32
+    of which
+        convex             : 12
+        concave            : 4
+        mixed              : 16
+        non-feature        : 0
+    edges  : 48
+    of which
+        external edges     : 33
+        internal edges     : 15
+        flat edges         : 0
+        open edges         : 0
+        multiply connected : 0
+
+Writing extendedFeatureEdgeMesh to "/home/chenhu/OpenFOAM/chenhu-v2406/run/H2Vent/1m3_27mm_wall_H2_test_02/constant/extendedFeatureEdgeMesh/box_shell_m.extendedFeatureEdgeMesh"
+
+Writing extendedEdgeMesh components to "/home/chenhu/OpenFOAM/chenhu-v2406/run/H2Vent/1m3_27mm_wall_H2_test_02/constant/extendedFeatureEdgeMesh/box_shell_m"
+Writing 12 convex feature points to "/home/chenhu/OpenFOAM/chenhu-v2406/run/H2Vent/1m3_27mm_wall_H2_test_02/constant/extendedFeatureEdgeMesh/box_shell_m_convexFeaturePts.obj"
+Writing 4 concave feature points to "/home/chenhu/OpenFOAM/chenhu-v2406/run/H2Vent/1m3_27mm_wall_H2_test_02/constant/extendedFeatureEdgeMesh/box_shell_m_concaveFeaturePts.obj"
+Writing 16 mixed feature points to "/home/chenhu/OpenFOAM/chenhu-v2406/run/H2Vent/1m3_27mm_wall_H2_test_02/constant/extendedFeatureEdgeMesh/box_shell_m_mixedFeaturePts.obj"
+Writing 16 mixed feature point structure to "/home/chenhu/OpenFOAM/chenhu-v2406/run/H2Vent/1m3_27mm_wall_H2_test_02/constant/extendedFeatureEdgeMesh/box_shell_m_mixedFeaturePtsStructure.obj"
+Writing 33 external edges to "/home/chenhu/OpenFOAM/chenhu-v2406/run/H2Vent/1m3_27mm_wall_H2_test_02/constant/extendedFeatureEdgeMesh/box_shell_m_externalEdges.obj"
+Writing 15 internal edges to "/home/chenhu/OpenFOAM/chenhu-v2406/run/H2Vent/1m3_27mm_wall_H2_test_02/constant/extendedFeatureEdgeMesh/box_shell_m_internalEdges.obj"
+Writing 0 flat edges to "/home/chenhu/OpenFOAM/chenhu-v2406/run/H2Vent/1m3_27mm_wall_H2_test_02/constant/extendedFeatureEdgeMesh/box_shell_m_flatEdges.obj"
+Writing 0 open edges to "/home/chenhu/OpenFOAM/chenhu-v2406/run/H2Vent/1m3_27mm_wall_H2_test_02/constant/extendedFeatureEdgeMesh/box_shell_m_openEdges.obj"
+Writing 0 multiple edges to "/home/chenhu/OpenFOAM/chenhu-v2406/run/H2Vent/1m3_27mm_wall_H2_test_02/constant/extendedFeatureEdgeMesh/box_shell_m_multipleEdges.obj"
+Writing 0 region edges to "/home/chenhu/OpenFOAM/chenhu-v2406/run/H2Vent/1m3_27mm_wall_H2_test_02/constant/extendedFeatureEdgeMesh/box_shell_m_regionEdges.obj"
+Writing 48 edge directions to "/home/chenhu/OpenFOAM/chenhu-v2406/run/H2Vent/1m3_27mm_wall_H2_test_02/constant/extendedFeatureEdgeMesh/box_shell_m_edgeDirections.obj"
+
+Writing featureEdgeMesh to "/home/chenhu/OpenFOAM/chenhu-v2406/run/H2Vent/1m3_27mm_wall_H2_test_02/constant/triSurface/box_shell_m.eMesh"
+ExecutionTime = 0 s  ClockTime = 0 s
+
+End
+
