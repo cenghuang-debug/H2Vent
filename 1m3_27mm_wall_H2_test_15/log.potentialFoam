@@ -1,0 +1,56 @@
+/*---------------------------------------------------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2406                                  |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+Build  : _630d60de3b-20240620 OPENFOAM=2406 version=v2406
+Arch   : "LSB;label=32;scalar=64"
+Exec   : potentialFoam
+Date   : Mar 27 2026
+Time   : 13:35:42
+Host   : RISEPC-MhOrpSuy
+PID    : 253554
+I/O    : uncollated
+Case   : /home/chenhu/OpenFOAM/chenhu-v2406/run/H2Vent/1m3_27mm_wall_H2_test_15
+nProcs : 1
+trapFpe: Floating point exception trapping enabled (FOAM_SIGFPE).
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 5, maxFileModificationPolls 20)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Create time
+
+Create mesh for time = 0
+
+
+potentialFlow: Operating solver in PISO mode
+
+Reading velocity field U
+
+Constructing pressure field p
+
+Constructing velocity potential field Phi
+
+No MRF models present
+
+
+Calculating potential flow
+DICPCG:  Solving for Phi, Initial residual = 1, Final residual = 0.00979897, No Iterations 45
+DICPCG:  Solving for Phi, Initial residual = 0.0035993, Final residual = 3.51583e-05, No Iterations 63
+DICPCG:  Solving for Phi, Initial residual = 6.01288e-05, Final residual = 9.98962e-07, No Iterations 44
+DICPCG:  Solving for Phi, Initial residual = 2.44008e-06, Final residual = 8.16966e-07, No Iterations 2
+DICPCG:  Solving for Phi, Initial residual = 8.97775e-07, Final residual = 8.97775e-07, No Iterations 0
+DICPCG:  Solving for Phi, Initial residual = 8.97775e-07, Final residual = 8.97775e-07, No Iterations 0
+DICPCG:  Solving for Phi, Initial residual = 8.97775e-07, Final residual = 8.97775e-07, No Iterations 0
+DICPCG:  Solving for Phi, Initial residual = 8.97775e-07, Final residual = 8.97775e-07, No Iterations 0
+DICPCG:  Solving for Phi, Initial residual = 8.97775e-07, Final residual = 8.97775e-07, No Iterations 0
+DICPCG:  Solving for Phi, Initial residual = 8.97775e-07, Final residual = 8.97775e-07, No Iterations 0
+DICPCG:  Solving for Phi, Initial residual = 8.97775e-07, Final residual = 8.97775e-07, No Iterations 0
+Continuity error = 3.56415e-09
+Interpolated velocity error = 9.29573e-09
+ExecutionTime = 8.39 s  ClockTime = 9 s
+
+End
+

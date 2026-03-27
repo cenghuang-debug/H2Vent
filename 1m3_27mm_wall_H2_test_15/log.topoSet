@@ -1,0 +1,51 @@
+/*---------------------------------------------------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2406                                  |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+Build  : _630d60de3b-20240620 OPENFOAM=2406 version=v2406
+Arch   : "LSB;label=32;scalar=64"
+Exec   : topoSet
+Date   : Mar 27 2026
+Time   : 13:35:34
+Host   : RISEPC-MhOrpSuy
+PID    : 253518
+I/O    : uncollated
+Case   : /home/chenhu/OpenFOAM/chenhu-v2406/run/H2Vent/1m3_27mm_wall_H2_test_15
+nProcs : 1
+trapFpe: Floating point exception trapping enabled (FOAM_SIGFPE).
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 5, maxFileModificationPolls 20)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Create time
+
+Create polyMesh for time = 0
+
+Reading topoSetDict
+
+Time = 0
+    mesh not changed.
+Created faceSet nozzle
+    Applying source patchToFace
+    Adding all faces of patches: (bottom) ...
+    Found matching patch bottom with 18099 faces
+    faceSet nozzle now size 18099
+Read set faceSet nozzle size:18099
+    Applying source cylinderToFace
+    Adding faces with centres within cylinder, with point1 = (0 0 -0.001), point2 = (0 0 0.001), radius = 0.0135
+    faceSet nozzle now size 44
+Created faceSet bottom_wall
+    Applying source patchToFace
+    Adding all faces of patches: (bottom) ...
+    Found matching patch bottom with 18099 faces
+    faceSet bottom_wall now size 18099
+Read set faceSet bottom_wall size:18099
+    Applying source faceToFace
+    Removing all elements of face sets: (nozzle)
+    faceSet bottom_wall now size 18055
+
+End
+

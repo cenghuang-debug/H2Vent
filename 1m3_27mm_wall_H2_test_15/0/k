@@ -1,0 +1,77 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2406                                  |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      binary;
+    arch        "LSB;label=32;scalar=64";
+    class       volScalarField;
+    location    "0";
+    object      k;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 2 -2 0 0 0 0];
+
+internalField   uniform 3.75e-05;
+
+boundaryField
+{
+    left
+    {
+        type            symmetryPlane;
+    }
+    right
+    {
+        type            inletOutlet;
+        inletValue      uniform 3.75e-05;
+        value           uniform 3.75e-05;
+    }
+    top
+    {
+        type            inletOutlet;
+        inletValue      uniform 3.75e-05;
+        value           uniform 3.75e-05;
+    }
+    front
+    {
+        type            inletOutlet;
+        inletValue      uniform 3.75e-05;
+        value           uniform 3.75e-05;
+    }
+    back
+    {
+        type            inletOutlet;
+        inletValue      uniform 3.75e-05;
+        value           uniform 3.75e-05;
+    }
+    nozzle_27mm_5mm_m
+    {
+        type            kqRWallFunction;
+        value           uniform 3.75e-05;
+    }
+    box_shell_m
+    {
+        type            kqRWallFunction;
+        value           uniform 3.75e-05;
+    }
+    nozzle
+    {
+        type            turbulentIntensityKineticEnergyInlet;
+        intensity       0.1;
+        value           uniform 0.6144;
+    }
+    bottom_wall
+    {
+        type            kqRWallFunction;
+        value           uniform 3.75e-05;
+    }
+}
+
+
+// ************************************************************************* //

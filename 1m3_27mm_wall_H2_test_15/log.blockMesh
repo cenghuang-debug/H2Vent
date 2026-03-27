@@ -1,0 +1,146 @@
+/*---------------------------------------------------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2406                                  |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+Build  : _630d60de3b-20240620 OPENFOAM=2406 version=v2406
+Arch   : "LSB;label=32;scalar=64"
+Exec   : blockMesh
+Date   : Mar 27 2026
+Time   : 13:31:14
+Host   : RISEPC-MhOrpSuy
+PID    : 252487
+I/O    : uncollated
+Case   : /home/chenhu/OpenFOAM/chenhu-v2406/run/H2Vent/1m3_27mm_wall_H2_test_15
+nProcs : 1
+trapFpe: Floating point exception trapping enabled (FOAM_SIGFPE).
+fileModificationChecking : Monitoring run-time modified files using timeStampMaster (fileModificationSkew 5, maxFileModificationPolls 20)
+allowSystemOperations : Allowing user-supplied system call operations
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+Create time
+
+Creating block mesh from "system/blockMeshDict"
+Using #calc - line 40 in file "system/blockMeshDict"
+Using #codeStream with "/home/chenhu/OpenFOAM/chenhu-v2406/run/H2Vent/1m3_27mm_wall_H2_test_15/dynamicCode/platforms/linux64GccDPInt32Opt/lib/libcodeStream_9404448b52916d7e6015662271cc958bed1ec761.so"
+Using #calc - line 46 in file "system/blockMeshDict"
+Using #codeStream with "/home/chenhu/OpenFOAM/chenhu-v2406/run/H2Vent/1m3_27mm_wall_H2_test_15/dynamicCode/platforms/linux64GccDPInt32Opt/lib/libcodeStream_f2d424b56efc35e02af4b123624fb792fa8a270a.so"
+Using #calc - line 47 in file "system/blockMeshDict"
+Using #codeStream with "/home/chenhu/OpenFOAM/chenhu-v2406/run/H2Vent/1m3_27mm_wall_H2_test_15/dynamicCode/platforms/linux64GccDPInt32Opt/lib/libcodeStream_0ff231ac6e8b28a2560655c9e292f0556c79b70d.so"
+Using #calc - line 48 in file "system/blockMeshDict"
+Using #codeStream with "/home/chenhu/OpenFOAM/chenhu-v2406/run/H2Vent/1m3_27mm_wall_H2_test_15/dynamicCode/platforms/linux64GccDPInt32Opt/lib/libcodeStream_fcbd8585a6ed0827641204783793770391662e2d.so"
+Using #calc - line 50 in file "system/blockMeshDict"
+Using #codeStream with "/home/chenhu/OpenFOAM/chenhu-v2406/run/H2Vent/1m3_27mm_wall_H2_test_15/dynamicCode/platforms/linux64GccDPInt32Opt/lib/libcodeStream_930cbe1eca474863388416ae666247a60bbb6061.so"
+Using #calc - line 51 in file "system/blockMeshDict"
+Using #codeStream with "/home/chenhu/OpenFOAM/chenhu-v2406/run/H2Vent/1m3_27mm_wall_H2_test_15/dynamicCode/platforms/linux64GccDPInt32Opt/lib/libcodeStream_6d499cca852224b905f94d7542dc53cd90412a2b.so"
+Using #calc - line 52 in file "system/blockMeshDict"
+Creating block edges
+No non-planar block faces defined
+Creating topology blocks
+
+Creating topology patches - from boundary section
+
+Creating block mesh topology - scaling/transform applied later
+
+Check topology
+
+	Basic statistics
+		Number of internal faces : 20
+		Number of boundary faces : 32
+		Number of defined boundary faces : 32
+		Number of undefined boundary faces : 0
+	Checking patch -> block consistency
+
+Creating block offsets
+Creating merge list (topological search)...
+Deleting polyMesh directory "constant/polyMesh"
+
+Creating polyMesh from blockMesh
+Creating patches
+Creating cells
+Creating points with scale (0.001 0.001 0.001)
+    Block 0 cell size :
+        i : 0.02 .. 0.02
+        j : 0.0692681 .. 0.034634
+        k : 0.02 .. 0.02
+
+    Block 1 cell size :
+        i : 0.02 .. 0.02
+        j : 0.02 .. 0.02
+        k : 0.02 .. 0.02
+
+    Block 2 cell size :
+        i : 0.02 .. 0.02
+        j : 0.034634 .. 0.0692681
+        k : 0.02 .. 0.02
+
+    Block 3 cell size :
+        i : 0.0692199 .. 0.13844
+        j : 0.0692681 .. 0.034634
+        k : 0.02 .. 0.02
+
+    Block 4 cell size :
+        i : 0.0692199 .. 0.13844
+        j : 0.02 .. 0.02
+        k : 0.02 .. 0.02
+
+    Block 5 cell size :
+        i : 0.0692199 .. 0.13844
+        j : 0.034634 .. 0.0692681
+        k : 0.02 .. 0.02
+
+    Block 6 cell size :
+        i : 0.02 .. 0.02
+        j : 0.0692681 .. 0.034634
+        k : 0.0692199 .. 0.13844
+
+    Block 7 cell size :
+        i : 0.02 .. 0.02
+        j : 0.02 .. 0.02
+        k : 0.0692199 .. 0.13844
+
+    Block 8 cell size :
+        i : 0.02 .. 0.02
+        j : 0.034634 .. 0.0692681
+        k : 0.0692199 .. 0.13844
+
+    Block 9 cell size :
+        i : 0.0692199 .. 0.13844
+        j : 0.0692681 .. 0.034634
+        k : 0.0692199 .. 0.13844
+
+    Block 10 cell size :
+        i : 0.0692199 .. 0.13844
+        j : 0.02 .. 0.02
+        k : 0.0692199 .. 0.13844
+
+    Block 11 cell size :
+        i : 0.0692199 .. 0.13844
+        j : 0.034634 .. 0.0692681
+        k : 0.0692199 .. 0.13844
+
+No patch pairs to merge
+
+Writing polyMesh with 0 cellZones
+----------------
+Mesh Information
+----------------
+  boundingBox: (0 -3.5 0) (3.5 3.5 4)
+  nPoints: 775656
+  nCells: 748000
+  nFaces: 2271350
+  nInternalFaces: 2216650
+----------------
+Patches
+----------------
+  patch 0 (start: 2216650 size: 13600) name: left
+  patch 1 (start: 2230250 size: 13600) name: right
+  patch 2 (start: 2243850 size: 9350) name: top
+  patch 3 (start: 2253200 size: 9350) name: bottom
+  patch 4 (start: 2262550 size: 4400) name: front
+  patch 5 (start: 2266950 size: 4400) name: back
+
+End
+

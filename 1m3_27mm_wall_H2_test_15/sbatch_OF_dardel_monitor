@@ -1,0 +1,166 @@
+#!/bin/bash -l
+#The name of the script is mytest
+#SBATCH -J H2_15
+# Set the allocation to be charged for this job
+#SBATCH -A naiss2025-22-1135
+# XX hour wall-clock time will be given to this job
+#SBATCH -t 00:30:00
+# Set the partition for your job. 
+#SBATCH -p main
+nodes=1            # Number of nodes
+cores=128          # Number of cores per node
+# Number of nodes
+#SBATCH --nodes=$nodes
+# Number of MPI processes per node (default 128)
+#SBATCH --ntasks-per-node=$cores
+# Load the openfoam module
+module load PDC
+module load openfoam/v2406
+# Set the openfoam environment variables
+. $FOAM_BASHRC
+# Change OpenFoam user directory to the project directory
+cd ~/naiss2024-5-347/
+WM_PROJECT_DIRECTORY2=$(pwd)
+export WM_PROJECT_USER_DIR=$WM_PROJECT_DIRECTORY2/$WM_PROJECT/$USER-$WM_PROJECT_VERSION
+export FOAM_RUN=$WM_PROJECT_USER_DIR/run
+CASE=$FOAM_RUN/H2Vent/1m3_27mm_wall_H2_test_15
+LOGFILE=$CASE/log.rhoReactingBuoyantFoam
+
+# ── Temperature guard limits ────────────────────────────────────────────────
+T_MIN_LIMIT=200   # K  — stop if T drops at or below this value
+T_MAX_LIMIT=5000  # K  — stop if T rises at or above this value
+
+#############################################
+# Helper: write stopAt writeNow, wait, then
+# reconstruct the saved time directory
+#############################################
+save_and_reconstruct()
+{
+    local REASON="$1"
+    echo ">>> $REASON — triggering writeNow and waiting for solver to flush..."
+
+    # Ask OpenFOAM to write the current fields and stop cleanly.
+    # Works because controlDict has runTimeModifiable yes.
+    echo "stopAt writeNow;" >> "$CASE/system/controlDict"
+
+    # Give the solver time to detect the change and write fields.
+    local TIMEOUT=300   # seconds to wait for the write
+    local ELAPSED=0
+    local LAST_TIME=""
+    echo "Waiting up to ${TIMEOUT}s for solver to write final fields..."
+
+    while [ $ELAPSED -lt $TIMEOUT ]; do
+        # Check whether the solver has already exited
+        if ! kill -0 $SOLVER_PID 2>/dev/null; then
+            echo "Solver exited on its own after writeNow."
+            break
+        fi
+
+        # Find the latest processor0 time directory
+        LATEST=$(ls -d "$CASE/processor0"/[0-9]* 2>/dev/null \
+                 | awk -F'/' '{print $NF}' \
+                 | sort -g | tail -n 1)
+
+        if [ "$LATEST" != "$LAST_TIME" ] && [ -n "$LATEST" ]; then
+            LAST_TIME="$LATEST"
+            echo "  New time directory detected: $LATEST"
+        fi
+
+        sleep 10
+        ELAPSED=$((ELAPSED + 10))
+    done
+
+    # If solver is still running after timeout, kill it
+    if kill -0 $SOLVER_PID 2>/dev/null; then
+        echo "Timeout reached. Force-killing solver PID $SOLVER_PID ..."
+        kill $SOLVER_PID
+        wait $SOLVER_PID 2>/dev/null
+    else
+        wait $SOLVER_PID 2>/dev/null
+    fi
+
+    echo "Reconstructing the latest time directory..."
+    srun -n 1 reconstructPar -latestTime -case "$CASE" \
+        >> "$CASE/log.reconstructPar" 2>&1
+    echo "Reconstruction complete. Latest time: $LAST_TIME"
+}
+
+# Decompose solution (serial)
+echo "DECOMPOSE MESH WITH decomposePar..."
+srun -n 1 decomposePar -case $CASE > $CASE/log.decomposePar 2>&1 &
+
+# Start the OpenFOAM job
+echo "run case in parallel ..."
+srun -n $(($nodes*$cores)) -N $nodes rhoReactingBuoyantFoam \
+    -case $CASE -parallel > "$LOGFILE" 2>&1 &
+SOLVER_PID=$!
+echo "Solver PID = $SOLVER_PID"
+
+#############################################
+# Wait for logfile to be created
+#############################################
+while [ ! -f "$LOGFILE" ]; do
+    sleep 1
+done
+
+#############################################
+#  MONITOR THE LOG FOR TEMPERATURE BLOW-UP
+#############################################
+echo "Monitoring log for temperature outside [${T_MIN_LIMIT} K, ${T_MAX_LIMIT} K]..."
+
+while kill -0 $SOLVER_PID 2>/dev/null; do
+
+    # Extract the most recent min/max(T) line
+    LINE=$(grep "min/max(T)" "$LOGFILE" | tail -n 1)
+    [ -z "$LINE" ] && sleep 5 && continue
+
+    # Parse Tmin and Tmax from lines like:
+    #   min/max(T) = 285.3, 300.1
+    # or
+    #   min/max(T) = 285.3 300.1
+    TMIN=$(echo "$LINE" | awk -F'[=,]' '{print $2}' | tr -d ' ')
+    TMAX=$(echo "$LINE" | awk -F'[=,]' '{print $3}' | tr -d ' ')
+
+    # Fallback: try space-separated format if comma parse gave empty results
+    if [ -z "$TMIN" ] || [ -z "$TMAX" ]; then
+        TMIN=$(echo "$LINE" | awk -F'=' '{print $2}' | awk '{print $1}')
+        TMAX=$(echo "$LINE" | awk -F'=' '{print $2}' | awk '{print $2}')
+    fi
+
+    # Skip if still empty or non-numeric
+    [[ -z "$TMIN" || -z "$TMAX" ]]       && sleep 5 && continue
+    [[ ! "$TMIN" =~ ^-?[0-9] ]]          && sleep 5 && continue
+    [[ ! "$TMAX" =~ ^-?[0-9] ]]          && sleep 5 && continue
+
+    # Truncate to integer (handles both 285 and 285.3)
+    TMIN_INT=${TMIN%.*}
+    TMAX_INT=${TMAX%.*}
+
+    # ── Lower bound check ───────────────────────────────────────────────────
+    if [ "$TMIN_INT" -le "$T_MIN_LIMIT" ]; then
+        STAMP=$(date +%F_%H-%M-%S)
+        echo "⚠️  [${STAMP}] T_min = ${TMIN} K  ≤  ${T_MIN_LIMIT} K  →  SAVING & STOPPING"
+        cp "$LOGFILE" "$CASE/log.Tmin_blowdown_${STAMP}"
+        save_and_reconstruct "T_min blow-down (${TMIN} K <= ${T_MIN_LIMIT} K)"
+        exit 1
+    fi
+
+    # ── Upper bound check ───────────────────────────────────────────────────
+    if [ "$TMAX_INT" -ge "$T_MAX_LIMIT" ]; then
+        STAMP=$(date +%F_%H-%M-%S)
+        echo "🔥  [${STAMP}] T_max = ${TMAX} K  ≥  ${T_MAX_LIMIT} K  →  SAVING & STOPPING"
+        cp "$LOGFILE" "$CASE/log.Tmax_blowup_${STAMP}"
+        save_and_reconstruct "T_max blow-up (${TMAX} K >= ${T_MAX_LIMIT} K)"
+        exit 1
+    fi
+
+    sleep 10
+done
+
+#############################################
+# Normal completion path
+#############################################
+echo "Solver finished normally."
+echo "Reconstructing all time directories..."
+srun -n 1 reconstructPar -case $CASE > $CASE/log.reconstructPar 2>&1
+echo "Done."
