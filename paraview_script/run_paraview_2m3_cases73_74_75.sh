@@ -1,0 +1,39 @@
+#!/bin/bash
+# Run paraview_script_2m3_linux.py for cases 73, 74, 75 (2 m³, 4 mm nozzle),
+# both H2_vol_con and U modes.
+#
+# Usage:
+#   bash run_paraview_2m3_cases73_74_75.sh
+#   bash run_paraview_2m3_cases73_74_75.sh --debug    # last time step only
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PV_SCRIPT="${SCRIPT_DIR}/paraview_script_2m3_linux.py"
+
+DEBUG_FLAG=""
+if [[ "$1" == "--debug" ]]; then
+    DEBUG_FLAG="--debug"
+    echo "DEBUG mode: only last time step per case/mode"
+fi
+
+CASES=(73 74 75)
+MODES=(H2_vol_con U)
+
+for CASE in "${CASES[@]}"; do
+    CASE_NAME="2m3_4mm_wall_H2_test_${CASE}"
+    for MODE in "${MODES[@]}"; do
+        echo "========================================"
+        echo "Case: ${CASE_NAME}   Mode: ${MODE}"
+        echo "========================================"
+        PYTHONPATH=/usr/lib/python3/dist-packages \
+        LIBGL_ALWAYS_SOFTWARE=1 MESA_GL_VERSION_OVERRIDE=4.5 \
+        pvpython "${PV_SCRIPT}" "${CASE_NAME}" --mode "${MODE}" ${DEBUG_FLAG}
+        if [[ $? -ne 0 ]]; then
+            echo "[ERROR] pvpython failed for ${CASE_NAME} mode=${MODE}"
+        else
+            echo "[OK] Done: ${CASE_NAME} mode=${MODE}"
+        fi
+        echo ""
+    done
+done
+
+echo "All done."

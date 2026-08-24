@@ -1,0 +1,64 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2406                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volVectorField;
+    object      U;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 1 -1 0 0 0 0];
+
+internalField   uniform (0 0 0);  
+
+boundaryField
+{
+    left
+    {
+        type            symmetryPlane;
+    }
+    right
+    {
+        type            zeroGradient;
+    }
+    front
+    {
+        type            zeroGradient;
+    }
+    back
+    {
+        type            zeroGradient;
+    }
+    bottom_wall
+    {
+        type            noSlip;
+    }
+    top
+    {
+        type            zeroGradient;
+    }
+    nozzle_27mm_5mm_m
+    {
+        type            noSlip;
+    }
+    nozzle
+    {
+        type            flowRateInletVelocity;
+        massFlowRate    1.6339e-04;  // 218.1 NL/min H2 (half domain), rho_H2=0.0899 kg/m3 at 0C 1atm
+        value           $internalField;
+        rho             rho;
+        rhoInlet        8.6e-2;
+    }
+    box_shell_m  //wall
+    {
+        type            noSlip;
+    }
+}
+// ************************************************************************* //

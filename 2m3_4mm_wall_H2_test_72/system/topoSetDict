@@ -1,0 +1,90 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2406                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      topoSetDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+actions
+(
+// After subsetMesh, the 'nozzleChannel' patch contains only the cut-plane
+// inlet faces at the top of the removed cylinder (coarser mesh: bore wall is
+// fully snapped to nozzle_4mm_1mm_m by snappyHexMesh, so no splitting needed).
+
+// --- nozzle inlet: all faces in nozzleChannel ---
+    {
+        name    nozzle;
+        type    faceSet;
+        action  new;
+        source  patchToFace;
+        sourceInfo { patch "nozzleChannel"; }
+    }
+
+// --- bottom_wall: entire bottom patch (nozzle-channel faces are gone) ---
+    {
+        name    bottom_wall;
+        type    faceSet;
+        action  new;
+        source  patchToFace;
+        sourceInfo
+            {
+                patch "bottom";
+            }
+    }
+/*
+//create vent_lower
+    {
+        name    vent_lower;
+        type    faceSet;
+        action  new;
+        source  patchToFace;
+        sourceInfo
+            {
+                patch "front";
+            }
+    }
+    {
+        name    vent_lower;
+        type    faceSet;
+        action  subset;
+        source  boxToFace;
+        sourceInfo
+            {
+                box (0 -0.4976 0) (0.48 -0.4974 0.18);  
+            }
+    }
+//create vent_upper
+    {
+        name    vent_upper;
+        type    faceSet;
+        action  new;
+        source  patchToFace;
+        sourceInfo
+            {
+                patch "back";
+            }
+    }
+    {
+        name    vent_upper;
+        type    faceSet;
+        action  subset;
+        source  boxToFace;
+        sourceInfo
+            {
+                box  (0 0.4974 0.82) (0.48 0.4976 1);  
+            }
+    }
+*/    
+);
+
+
+// ************************************************************************* //

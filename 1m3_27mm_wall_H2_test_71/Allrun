@@ -1,0 +1,38 @@
+#!/bin/sh
+
+#cd ${0%/*} || exit 1                        # Run from this directory
+. $WM_PROJECT_DIR/bin/tools/RunFunctions    # Tutorial run functions
+
+#cp \
+#    $FOAM_TUTORIALS/resources/geometry/membrane-boundaries.stl.gz \
+#    $FOAM_TUTORIALS/resources/geometry/membrane-membrane.stl.gz \
+#    constant/triSurface
+runApplication surfaceFeatureExtract
+runApplication blockMesh
+runApplication snappyHexMesh -overwrite
+rm -f 0/cellLevel 0/pointLevel
+
+# Remove nozzle bore cells from z=0 to z=0.053 m (keep top 27 mm = 1D)
+runApplication -s removeCells topoSet -dict system/topoSetDict.removeCells
+# Expose cut-plane face as patch 'nozzleChannel'
+runApplication subsetMesh fluidDomain -overwrite -patch nozzleChannel
+
+runApplication topoSet
+runApplication createPatch -overwrite
+
+# Copy ICs after mesh is finalised so patch names match
+cp -r 0.orig/* 0/.
+
+runApplication checkMesh
+runApplication renumberMesh -overwrite
+runApplication potentialFoam #set initial U field
+touch open.foam
+#replace the gamma 
+#sed -i '38s/gamma           1;/gamma           1.4;/' 0/p
+#restore0Dir
+
+#runApplication setFields
+
+#runApplication reactingFoam
+
+#------------------------------------------------------------------------------

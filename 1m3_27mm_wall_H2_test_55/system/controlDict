@@ -1,0 +1,86 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2406                                  |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+FoamFile
+{
+    version         2;
+    format          ascii;
+    class           dictionary;
+    location        "system";
+    object          controlDict;
+}
+
+application     rhoReactingBuoyantFoam;
+
+startFrom       startTime;
+
+startTime       0;
+
+endTime         1000;
+
+deltaT          0.0001;
+
+writeControl    adjustableRunTime;
+
+writeInterval   10;
+
+purgeWrite      10;
+
+writeFormat     binary;
+
+writePrecision  6;
+
+writeCompression off;
+
+timeFormat      general;
+
+timePrecision   6;
+
+runTimeModifiable yes;
+
+adjustTimeStep  yes;
+
+maxCo           2;
+maxDeltaT       0.5;
+
+functions
+{
+    probes_H2_vertical
+    {
+        type            probes;
+        libs            ( sampling );
+        writeControl    runTime;
+        writeInterval   0.1;
+        probeLocations  ( ( 0.45 0 0.04 ) ( 0.45 0 0.105 ) ( 0.45 0 0.17 ) ( 0.45 0 0.235 ) ( 0.45 0 0.3 ) ( 0.45 0 0.365 ) ( 0.45 0 0.43 ) ( 0.45 0 0.495 ) ( 0.45 0 0.56 ) ( 0.45 0 0.625 ) ( 0.45 0 0.69 ) ( 0.45 0 0.755 ) ( 0.45 0 0.82 ) ( 0.45 0 0.885 ) ( 0.45 0 0.95 ) );
+        fields          ( H2 );
+    }
+    probes_H2_horizontal
+    {
+        type            probes;
+        libs            ( sampling );
+        executeControl  runTime;
+        executeInterval 0.1;
+        writeControl    runTime;
+        writeInterval   0.1;
+        probeLocations  ( ( 0 0 0.95 ) ( 0.05 0 0.95 ) ( 0.1 0 0.95 ) ( 0.15 0 0.95 ) ( 0.2 0 0.95 ) ( 0.25 0 0.95 ) ( 0.3 0 0.95 ) ( 0.35 0 0.95 ) ( 0.4 0 0.95 ) ( 0.45 0 0.95 ) );
+        fields          ( H2 );
+    }
+    myResiduals
+    {
+        type            solverInfo;
+        libs            ( "libutilityFunctionObjects.so" );
+        executeControl  timeStep;
+        executeInterval 100;
+        writeControl    timeStep;
+        writeInterval   100;
+        fields          ( p_rgh U k epsilon h H2 );
+    }
+}
+
+
+// ************************************************************************* //

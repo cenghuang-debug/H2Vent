@@ -1,0 +1,47 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2406                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      topoSetDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+// Select cells inside the 4 mm nozzle channel to be removed.
+// Nozzle length: 270 mm (0.270 m).  Keep top 4 mm (one nozzle diameter).
+// Cut plane at z = 0.270 - 0.004 = 0.266 m.
+
+actions
+(
+    {
+        name    nozzleChannel;
+        type    cellSet;
+        action  new;
+        source  cylinderToCell;
+        p1      (0 0 -0.001);   // slightly below floor to capture cells at z = 0
+        p2      (0 0  0.266);   // cut plane: 4 mm below nozzle exit (0.270 - 0.004)
+        radius  0.002;          // inner bore radius: 4 mm diameter / 2
+    }
+
+    {
+        name    fluidDomain;
+        type    cellSet;
+        action  new;
+        source  cellToCell;
+        set     nozzleChannel;
+    }
+    {
+        name    fluidDomain;
+        type    cellSet;
+        action  invert;
+    }
+);
+
+// ************************************************************************* //

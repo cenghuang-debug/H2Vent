@@ -1,0 +1,216 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version: v1812                                  |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      blockMeshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+scale 0.001;
+
+// ────────────────────────────────────────────────
+// 2 m³ enclosure: inner room ~960×960×2100 mm (half-domain, symmetry at x=0)
+// Box outer shell: ±490 mm × ±490 mm × [0, 2110] mm
+// Both vents on y=−480 mm wall: lower [0,190 mm], upper [1910,2100 mm]
+// ────────────────────────────────────────────────
+
+x_min        0.0;      // symmetry plane
+x_max        1500.0;   // outer domain max x [mm]
+y_min       -1500.0;
+y_max        1500.0;
+z_min        0.0;      // floor
+z_max        3500.0;   // outer domain top (box is ~2110 mm tall)
+
+dx_fine      20.0;     // cell size in fine region [mm]
+
+x_fine_min   0.0;
+x_fine_max   550.0;    // just beyond box half-width of 490 mm
+y_fine_min  -550.0;
+y_fine_max   550.0;
+z_fine_min   0.0;
+z_fine_max  2500.0;    // covers full box height (2100 mm) + 400 mm buffer
+
+expansion    2.0;
+expInv       #calc "1.0/$expansion";
+
+// ────────────────────────────────────────────────
+// Derived quantities
+// ────────────────────────────────────────────────
+
+xlen_fine    #calc "$x_fine_max - $x_fine_min";
+ylen_fine    #calc "$y_fine_max - $y_fine_min";
+zlen_fine    #calc "$z_fine_max - $z_fine_min";
+
+nx_fine      #calc "round($xlen_fine / $dx_fine)";
+ny_fine      #calc "round($ylen_fine / $dx_fine)";
+nz_fine      #calc "round($zlen_fine / $dx_fine)";
+
+nx_coarse    10;
+ny_coarse    20;
+nz_coarse    12;
+
+// ────────────────────────────────────────────────
+// VERTICES (0–35)
+// ────────────────────────────────────────────────
+vertices
+(
+    // z = z_min (bottom plane)
+    ($x_min      $y_min      $z_min)      //  0
+    ($x_fine_max $y_min      $z_min)      //  1
+    ($x_max      $y_min      $z_min)      //  2
+    ($x_min      $y_fine_min $z_min)      //  3
+    ($x_fine_max $y_fine_min $z_min)      //  4
+    ($x_max      $y_fine_min $z_min)      //  5
+    ($x_min      $y_fine_max $z_min)      //  6
+    ($x_fine_max $y_fine_max $z_min)      //  7
+    ($x_max      $y_fine_max $z_min)      //  8
+    ($x_min      $y_max      $z_min)      //  9
+    ($x_fine_max $y_max      $z_min)      // 10
+    ($x_max      $y_max      $z_min)      // 11
+
+    // z = z_fine_max (top of fine zone)
+    ($x_min      $y_min      $z_fine_max) // 12
+    ($x_fine_max $y_min      $z_fine_max) // 13
+    ($x_max      $y_min      $z_fine_max) // 14
+    ($x_min      $y_fine_min $z_fine_max) // 15
+    ($x_fine_max $y_fine_min $z_fine_max) // 16
+    ($x_max      $y_fine_min $z_fine_max) // 17
+    ($x_min      $y_fine_max $z_fine_max) // 18
+    ($x_fine_max $y_fine_max $z_fine_max) // 19
+    ($x_max      $y_fine_max $z_fine_max) // 20
+    ($x_min      $y_max      $z_fine_max) // 21
+    ($x_fine_max $y_max      $z_fine_max) // 22
+    ($x_max      $y_max      $z_fine_max) // 23
+
+    // z = z_max (top plane)
+    ($x_min      $y_min      $z_max)      // 24
+    ($x_fine_max $y_min      $z_max)      // 25
+    ($x_max      $y_min      $z_max)      // 26
+    ($x_min      $y_fine_min $z_max)      // 27
+    ($x_fine_max $y_fine_min $z_max)      // 28
+    ($x_max      $y_fine_min $z_max)      // 29
+    ($x_min      $y_fine_max $z_max)      // 30
+    ($x_fine_max $y_fine_max $z_max)      // 31
+    ($x_max      $y_fine_max $z_max)      // 32
+    ($x_min      $y_max      $z_max)      // 33
+    ($x_fine_max $y_max      $z_max)      // 34
+    ($x_max      $y_max      $z_max)      // 35
+);
+
+// ────────────────────────────────────────────────
+// BLOCKS with grading
+// ────────────────────────────────────────────────
+blocks
+(
+    // Lower z (fine): z_min to z_fine_max
+    hex ( 0  1  4  3 12 13 16 15) ($nx_fine $ny_coarse $nz_fine) simpleGrading (1 $expInv    1          )
+    hex ( 3  4  7  6 15 16 19 18) ($nx_fine $ny_fine   $nz_fine) simpleGrading (1 1          1          )
+    hex ( 6  7 10  9 18 19 22 21) ($nx_fine $ny_coarse $nz_fine) simpleGrading (1 $expansion 1          )
+    hex ( 1  2  5  4 13 14 17 16) ($nx_coarse $ny_coarse $nz_fine) simpleGrading ($expansion $expInv    1)
+    hex ( 4  5  8  7 16 17 20 19) ($nx_coarse $ny_fine   $nz_fine) simpleGrading ($expansion 1          1)
+    hex ( 7  8 11 10 19 20 23 22) ($nx_coarse $ny_coarse $nz_fine) simpleGrading ($expansion $expansion 1)
+
+    // Upper z (coarse): z_fine_max to z_max
+    hex (12 13 16 15 24 25 28 27) ($nx_fine $ny_coarse $nz_coarse) simpleGrading (1 $expInv    $expansion)
+    hex (15 16 19 18 27 28 31 30) ($nx_fine $ny_fine   $nz_coarse) simpleGrading (1 1          $expansion)
+    hex (18 19 22 21 30 31 34 33) ($nx_fine $ny_coarse $nz_coarse) simpleGrading (1 $expansion $expansion)
+    hex (13 14 17 16 25 26 29 28) ($nx_coarse $ny_coarse $nz_coarse) simpleGrading ($expansion $expInv    $expansion)
+    hex (16 17 20 19 28 29 32 31) ($nx_coarse $ny_fine   $nz_coarse) simpleGrading ($expansion 1          $expansion)
+    hex (19 20 23 22 31 32 35 34) ($nx_coarse $ny_coarse $nz_coarse) simpleGrading ($expansion $expansion $expansion)
+);
+
+edges
+(
+);
+
+boundary
+(
+    left
+    {
+        type symmetryPlane;
+        faces
+        (
+            ( 0 12 15  3)
+            ( 3 15 18  6)
+            ( 6 18 21  9)
+            (12 24 27 15)
+            (15 27 30 18)
+            (18 30 33 21)
+        );
+    }
+    right
+    {
+        type patch;
+        faces
+        (
+            ( 2 14 17  5)
+            ( 5 17 20  8)
+            ( 8 20 23 11)
+            (14 26 29 17)
+            (17 29 32 20)
+            (20 32 35 23)
+        );
+    }
+    top
+    {
+        type patch;
+        faces
+        (
+            (24 25 28 27)
+            (27 28 31 30)
+            (30 31 34 33)
+            (25 26 29 28)
+            (28 29 32 31)
+            (31 32 35 34)
+        );
+    }
+    bottom
+    {
+        type wall;
+        faces
+        (
+            ( 0  1  4  3)
+            ( 3  4  7  6)
+            ( 6  7 10  9)
+            ( 1  2  5  4)
+            ( 4  5  8  7)
+            ( 7  8 11 10)
+        );
+    }
+    front
+    {
+        type patch;
+        faces
+        (
+            ( 0  1 13 12)
+            ( 1  2 14 13)
+            (12 13 25 24)
+            (13 14 26 25)
+        );
+    }
+    back
+    {
+        type patch;
+        faces
+        (
+            ( 9 10 22 21)
+            (10 11 23 22)
+            (21 22 34 33)
+            (22 23 35 34)
+        );
+    }
+);
+
+mergePatchPairs
+(
+);
+
+// ************************************************************************* //

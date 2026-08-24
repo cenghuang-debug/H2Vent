@@ -1,0 +1,47 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2406                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      surfaceFeatureExtractDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+// Operate on the metre-scale versions produced by surfaceTransformPoints in Allrun.
+
+nozzle_27mm_5mm_27cm_m.stl
+{
+    extractionMethod    extractFromSurface;
+    includedAngle       170;
+
+    subsetFeatures
+    {
+        nonManifoldEdges    no;
+        openEdges           yes;
+    }
+
+    writeObj            yes;
+}
+
+box_shell_2m3_m.stl
+{
+    extractionMethod    extractFromSurface;
+    includedAngle       170;
+
+    subsetFeatures
+    {
+        nonManifoldEdges    no;
+        openEdges           yes;
+    }
+
+    writeObj            yes;
+}
+
+// ************************************************************************* //

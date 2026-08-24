@@ -1,0 +1,50 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2406                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      topoSetDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+// Select cells inside the 4 mm nozzle channel to be removed.
+// Nozzle collar: z = 0 (floor) to z = 0.08 m.
+// Keep top 4 mm (one nozzle diameter) → cut plane at z = 0.076 m.
+// Remove everything from z = 0 down to the floor, inside r = 2 mm.
+
+actions
+(
+    // Step 1: select cells inside the nozzle tube to be removed.
+    {
+        name    nozzleChannel;
+        type    cellSet;
+        action  new;
+        source  cylinderToCell;
+        p1      (0 0 -0.001);   // slightly below floor to capture cells at z = 0
+        p2      (0 0  0.076);   // cut plane: 4 mm below nozzle exit (0.08 - 0.004)
+        radius  0.002;          // inner bore radius: 4 mm diameter / 2
+    }
+
+    // Step 2: fluidDomain = all cells EXCEPT nozzleChannel (used by subsetMesh).
+    {
+        name    fluidDomain;
+        type    cellSet;
+        action  new;
+        source  cellToCell;
+        set     nozzleChannel;
+    }
+    {
+        name    fluidDomain;
+        type    cellSet;
+        action  invert;
+    }
+);
+
+// ************************************************************************* //

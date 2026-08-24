@@ -1,0 +1,70 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2406                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volVectorField;
+    object      U;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 1 -1 0 0 0 0];
+
+internalField   uniform (0 0 0);  
+
+boundaryField
+{
+    left
+    {
+        type            symmetryPlane;
+    }
+    right
+    {
+        type            zeroGradient;
+    }
+    front
+    {
+        type            zeroGradient;
+    }
+    back
+    {
+        type            zeroGradient;
+    }
+    bottom_wall
+    {
+        type            noSlip;
+    }
+    top
+    {
+        type            zeroGradient;
+    }
+    nozzle_27mm_5mm_m
+    {
+        type            noSlip;
+    }
+    nozzle
+    {
+        // Q = 10.4 NL/min; Ramp 0 → 0.32 m/s over 0.5 s (+z, upward from cut-plane inlet at z=0.053 m).
+        // U = ṁ/(ρ·A) = 7.80e-6 / (0.08585 × π/2×(0.0135)²) ≈ 0.32 m/s
+        // ρ_H2 = 0.08585 kg/m³ at T=286.15 K, P=101325 Pa (experiment conditions)
+        type            uniformFixedValue;
+        uniformValue    table
+        (
+            (0.0    (0 0 0))
+            (0.5    (0 0 0.32))
+            (100.0  (0 0 0.32))
+        );
+        value           uniform (0 0 0);
+    }
+    box_shell_m  //wall
+    {
+        type            noSlip;
+    }
+}
+// ************************************************************************* //

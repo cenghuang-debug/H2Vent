@@ -1,0 +1,191 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2406                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      snappyHexMeshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+castellatedMesh true;
+snap            true;
+addLayers       false;
+
+geometry
+{
+    nozzle_27mm_5mm_27cm_m.stl
+    {
+        type triSurfaceMesh;
+        name nozzle_27mm_5mm_27cm;
+    }
+
+    box_shell_2m3_m.stl
+    {
+        type triSurfaceMesh;
+        name box_shell_2m3;
+    }
+
+    // Full enclosure interior — used for level-1 background refinement
+    refinementBox_big
+    {
+        type box;
+        min  (0 -0.5 0);
+        max  (0.5 0.5 2.1);
+    }
+
+    // Jet column from nozzle exit up to mid-height
+    refinementBox_medium
+    {
+        type box;
+        min  (0 -0.2 0);
+        max  (0.2 0.2 1.5);
+    }
+
+    // Near-nozzle shear layer
+    refinementBox_small
+    {
+        type box;
+        min  (0 -0.1 0);
+        max  (0.1 0.1 0.8);
+    }
+
+    // Nozzle exit region (27 cm nozzle: jet exits at z=0.270 m)
+    refinementBox_xsmall
+    {
+        type box;
+        min  (0 -0.04 0.20);
+        max  (0.04 0.04 0.40);
+    }
+}
+
+
+castellatedMeshControls
+{
+    maxLocalCells 100000;
+    maxGlobalCells 4000000;
+    minRefinementCells 0;
+    nCellsBetweenLevels 3;
+
+    features
+    (
+        {
+            file "nozzle_27mm_5mm_27cm_m.eMesh";
+            level 2;
+        }
+        {
+            file "box_shell_2m3_m.eMesh";
+            level 1;
+        }
+    );
+
+    refinementSurfaces
+    {
+        nozzle_27mm_5mm_27cm
+        {
+            level (2 2);
+        }
+        box_shell_2m3
+        {
+            level (1 1);
+        }
+    }
+
+    resolveFeatureAngle 10;
+
+    refinementRegions
+    {
+        refinementBox_big
+        {
+            mode inside;
+            levels ((1 1));
+        }
+        refinementBox_medium
+        {
+            mode inside;
+            levels ((1 1));
+        }
+        refinementBox_small
+        {
+            mode inside;
+            levels ((2 2));
+        }
+        refinementBox_xsmall
+        {
+            mode inside;
+            levels ((3 3));
+        }
+    }
+
+    // Inside the 2 m³ enclosure, clear of the nozzle tube
+    locationInMesh (0.31 0.11 1.01); // offset from grid (dx=0.020m) to avoid cell-face coincidence
+
+    allowFreeStandingZoneFaces false;
+}
+
+
+snapControls
+{
+    nSmoothPatch    3;
+    tolerance       1.0;
+    nSolveIter      300;
+    nRelaxIter      5;
+    nFeatureSnapIter 15; //10;
+    implicitFeatureSnap true;
+    explicitFeatureSnap true;
+    multiRegionFeatureSnap false;
+}
+
+
+addLayersControls
+{
+    relativeSizes true;
+    layers {}
+    expansionRatio          1.0;
+    finalLayerThickness     0.25;
+    minThickness            0.2;
+    nGrow                   0;
+    featureAngle            30;
+    nRelaxIter              5;
+    nSmoothSurfaceNormals   1;
+    nSmoothNormals          3;
+    nSmoothThickness        10;
+    maxFaceThicknessRatio   0.5;
+    maxThicknessToMedialRatio 0.3;
+    minMedialAxisAngle      90;
+    nBufferCellsNoExtrude   0;
+    nLayerIter              50;
+    nRelaxedIter            20;
+}
+
+
+meshQualityControls
+{
+    #include "meshQualityDict"
+
+    relaxed
+    {
+        maxNonOrtho 60;
+    }
+
+    nSmoothScale    4;
+    errorReduction  0.75;
+}
+
+
+writeFlags
+(
+    scalarLevels
+    layerSets
+    layerFields
+);
+
+mergeTolerance 1E-6;
+
+// ************************************************************************* //

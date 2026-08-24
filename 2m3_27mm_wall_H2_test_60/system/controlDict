@@ -1,0 +1,193 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2406                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      controlDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+application     rhoReactingBuoyantFoam; //reactingFoam;
+
+startFrom       startTime;
+
+startTime       0;
+//stopAt          writeNow; 
+endTime         1000;
+
+deltaT          1e-4; // Small initial dt for 27 mm nozzle ramp-up
+
+writeControl    adjustableRunTime;  //timeStep;
+
+writeInterval   10;
+
+purgeWrite      10;//0;
+
+writeFormat     binary; //ascii;
+
+writePrecision  6;
+
+writeCompression off;
+
+timeFormat      general;
+
+timePrecision   6;
+
+runTimeModifiable yes;
+
+adjustTimeStep  yes;
+
+maxCo           2; //4;
+maxDeltaT       0.5; // cap timestep in slow buoyancy-dominated phase
+
+functions
+{
+    probes_H2_vertical
+    {
+        type            probes;
+        libs            (sampling);
+        writeControl    runTime;//writeTime;
+        writeInterval   0.1;
+        // Experimental mast positions — Bernard-Michel & Houssin-Agbomson (2017)
+        // 15 sensors, lowest at 204 mm, spacing 120 mm; 324 mm position absent.
+        // Heights: 204, 444, 564, 684, 804, 924, 1044, 1164, 1284, 1404, 1524, 1644, 1764, 1884, 2004 mm
+        // Probe 14 (index 14) = ceiling sensor at z=2.004 m
+        probeLocations
+        (
+            (0.45 0 0.204)
+            (0.45 0 0.444)
+            (0.45 0 0.564)
+            (0.45 0 0.684)
+            (0.45 0 0.804)
+            (0.45 0 0.924)
+            (0.45 0 1.044)
+            (0.45 0 1.164)
+            (0.45 0 1.284)
+            (0.45 0 1.404)
+            (0.45 0 1.524)
+            (0.45 0 1.644)
+            (0.45 0 1.764)
+            (0.45 0 1.884)
+            (0.45 0 2.004) // ceiling sensor
+        );
+        fields          (H2);
+    }
+
+    probes_H2_vertical_back
+    {
+        type            probes;
+        libs            (sampling);
+        writeControl    runTime;
+        writeInterval   0.1;
+        // Same z heights as probes_H2_vertical; mast on back wall (y=0.45 m, opposite to vents)
+        probeLocations
+        (
+            (0 0.45 0.204)
+            (0 0.45 0.444)
+            (0 0.45 0.564)
+            (0 0.45 0.684)
+            (0 0.45 0.804)
+            (0 0.45 0.924)
+            (0 0.45 1.044)
+            (0 0.45 1.164)
+            (0 0.45 1.284)
+            (0 0.45 1.404)
+            (0 0.45 1.524)
+            (0 0.45 1.644)
+            (0 0.45 1.764)
+            (0 0.45 1.884)
+            (0 0.45 2.004) // ceiling sensor
+        );
+        fields          (H2);
+    }
+
+    probes_H2_horizontal
+    {
+        type            probes;
+        libs            (sampling);
+        executeControl  runTime;
+        executeInterval 0.1;
+        writeControl    runTime;
+        writeInterval   0.1;
+        // Horizontal sweep at ceiling sensor height (z=2.004 m)
+        probeLocations
+        (
+            (    0 0.0 2.004)
+            ( 50e-3 0.0 2.004)
+            (100e-3 0.0 2.004)
+            (150e-3 0.0 2.004)
+            (200e-3 0.0 2.004)
+            (250e-3 0.0 2.004)
+            (300e-3 0.0 2.004)
+            (350e-3 0.0 2.004)
+            (400e-3 0.0 2.004)
+            (450e-3 0.0 2.004)
+        );
+        fields          (H2);
+    }
+
+    myResiduals
+    {
+        type            solverInfo;
+        libs            ("libutilityFunctionObjects.so");
+
+        executeControl  timeStep;
+        executeInterval 100;      // Sample less frequently
+
+        writeControl    timeStep;
+        writeInterval   100;      // Write every 100 timesteps
+                                  
+        // List the fields to monitor (add more as needed)
+        fields          (p_rgh U k epsilon h H2);
+
+        // Optional: Set to 'yes' to also output residual fields to time directories
+        // writeResidualFields yes;
+
+        // Optional: Control when to execute (defaults to timeStep if unspecified)
+        // executeControl  timeStep;
+        // executeInterval 1;
+    }
+/*
+    massFlowVentLower
+    {
+        type            surfaceFieldValue;//patchFlowRate;
+        libs            (fieldFunctionObjects);
+        //excuting and sampling frequency
+        executeControl  runTime;
+        executeInterval 0.1;    //execute every 0.1 s
+        writeControl    runTime;
+        writeInterval   0.1;    //write every 0.1 s
+        log                 true;
+        writeFields         no;
+        regionType      patch;
+        name            vent_lower;
+        operation       sum;
+        fields          (phi);
+    }
+    massFlowVentUpper
+    {
+        type            surfaceFieldValue;//patchFlowRate;
+        libs            (fieldFunctionObjects);
+        //excuting and sampling frequency
+        executeControl  runTime;
+        executeInterval 0.1;    //execute every 0.1 s
+        writeControl    runTime;
+        writeInterval   0.1;    //write every 0.1 s
+        log                 true;
+        writeFields         no;
+        regionType      patch;
+        name            vent_upper;
+        operation       sum;
+        fields          (phi);
+    }
+*/    
+}
+// ************************************************************************* //
