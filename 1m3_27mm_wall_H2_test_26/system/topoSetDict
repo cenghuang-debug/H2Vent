@@ -1,0 +1,107 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2406                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      topoSetDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+actions
+(
+//create nozzle
+    {
+        name    nozzle;
+        type    faceSet;
+        action  new;
+        source  patchToFace;
+        sourceInfo
+            {
+                patch "bottom";
+            }
+    }
+    {
+        name    nozzle;
+        type    faceSet;
+        action  subset;
+        source  cylinderToFace;
+        sourceInfo
+        {
+            p1 (0 0 -1e-3);  // center of circle (bottom)
+            p2 (0 0 1e-3);  // center of circle (top)
+            radius 13.5e-3; // radius of the circle
+        }
+    }
+//create bottom_wall
+    {
+        name    bottom_wall;
+        type    faceSet;
+        action  new;
+        source  patchToFace;
+        sourceInfo
+            {
+                patch "bottom";
+            }
+    }
+    {
+        name    bottom_wall;
+        type    faceSet;
+        action  subtract;
+        source  faceToFace;
+        set     nozzle;
+    }
+/*
+//create vent_lower
+    {
+        name    vent_lower;
+        type    faceSet;
+        action  new;
+        source  patchToFace;
+        sourceInfo
+            {
+                patch "front";
+            }
+    }
+    {
+        name    vent_lower;
+        type    faceSet;
+        action  subset;
+        source  boxToFace;
+        sourceInfo
+            {
+                box (0 -0.4976 0) (0.48 -0.4974 0.18);  
+            }
+    }
+//create vent_upper
+    {
+        name    vent_upper;
+        type    faceSet;
+        action  new;
+        source  patchToFace;
+        sourceInfo
+            {
+                patch "back";
+            }
+    }
+    {
+        name    vent_upper;
+        type    faceSet;
+        action  subset;
+        source  boxToFace;
+        sourceInfo
+            {
+                box  (0 0.4974 0.82) (0.48 0.4976 1);  
+            }
+    }
+*/    
+);
+
+
+// ************************************************************************* //

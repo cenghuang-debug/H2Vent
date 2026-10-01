@@ -1,0 +1,73 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2406                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volVectorField;
+    object      U;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 1 -1 0 0 0 0];
+
+internalField   uniform (0 0 0);  
+
+boundaryField
+{
+    left
+    {
+        type            symmetryPlane;
+    }
+    right
+    {
+        type            zeroGradient;
+    }
+    front
+    {
+        type            zeroGradient;
+    }
+    back
+    {
+        type            zeroGradient;
+    }
+    bottom_wall
+    {
+        type            noSlip;
+    }
+    top
+    {
+        type            zeroGradient;
+    }
+    nozzle_4mm_3mm_27cm
+    {
+        type            noSlip;
+    }
+    nozzle
+    {
+        // Ramp 0 → 101.43 m/s over 0.5 s (+z, upward from floor nozzle).
+        // Q = 73 NL/min → ṁ_full = 1.09e-4 kg/s → ṁ_half = 5.45e-5 kg/s
+        // U = ṁ/(ρ·A) = 5.45e-5 / (0.08583 × π/2×(2e-3)²) ≈ 101.43 m/s
+        // ρ_H2 = 0.08583 kg/m³ at T=286.15 K, P=101325 Pa
+        // k/epsilon auto-scale via turbulentIntensityKineticEnergyInlet (I=0.05)
+        // and turbulentMixingLengthDissipationRateInlet (L=2.8e-4 m).
+        type            uniformFixedValue;
+        uniformValue    table
+        (
+            (0.0    (0 0 0))
+            (0.5    (0 0 101.43))
+            (1000.0 (0 0 101.43))
+        );
+        value           uniform (0 0 0);
+    }
+    box_shell_2m3  //wall
+    {
+        type            noSlip;
+    }
+}
+// ************************************************************************* //

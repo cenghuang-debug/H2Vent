@@ -1,0 +1,122 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v1812                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      fvSolution;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+solvers
+{
+    "rho.*"
+    {
+        solver          diagonal;
+    }
+
+    p_rgh
+    {
+        solver           PCG;
+        preconditioner   DIC;
+        tolerance        1e-6;
+        relTol           0; 
+    }
+
+    p_rghFinal
+    {
+        $p_rgh;
+        tolerance        1e-6;
+        relTol           0;     // no early exit on final correction
+    }
+
+    "(U|h|k|epsilon|omega)"
+    {
+        solver          PBiCGStab;
+        preconditioner  DILU;
+        tolerance       1e-6;
+        relTol          0;
+        minIter         1;
+    }
+
+    "(U|h|k|epsilon|omega)Final"
+    {
+        $U;
+        tolerance       1e-6;
+        relTol          0;
+    }
+
+    ph_rgh
+    {
+        $p_rgh;
+    }
+
+    Yi
+    {
+        $hFinal;
+    }
+
+    Phi
+    {
+        $p_rgh;
+    }
+}
+
+PIMPLE
+{
+    momentumPredictor on;
+    nOuterCorrectors 8; //5;
+    nCorrectors     2;
+    nNonOrthogonalCorrectors 1;  // reduced from 2 (max non-ortho=54.5°, 1 is sufficient)
+    hydrostaticInitialisation true;
+    nHydrostaticCorrectors    5;
+
+    // Absolute stopping criteria — outer loop keeps iterating until
+    // every field is below its tolerance. Prevents per-step energy/
+    // species errors from accumulating (V_house case16 fix5).
+    residualControl
+    {
+        p_rgh
+        {
+            tolerance   1e-4;
+            relTol      0.0;
+        }
+        U
+        {
+            tolerance   1e-5;
+            relTol      0.0;
+        }
+        h
+        {
+            tolerance   1e-6;
+            relTol      0.0;
+        }
+        "(H2|O2|H2O|air)"
+        {
+            tolerance   1e-6;
+            relTol      0.0;
+        }
+    }
+}
+
+potentialFlow
+{
+    nNonOrthogonalCorrectors 10;
+}
+
+relaxationFactors
+{
+    equations
+    {
+        "(U|k|epsilon|h|H2|O2|H2O|air|p_rgh)"         0.7;
+        "(U|k|epsilon|h|H2|O2|H2O|air|p_rgh)Final"    0.7;
+    }
+}
+// ************************************************************************* //

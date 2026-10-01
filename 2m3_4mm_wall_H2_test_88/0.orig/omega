@@ -1,0 +1,78 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2406                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    object      omega;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+// omega = epsilon / (Cmu * k) = 3.02e-9 / (0.09 * 1.5e-6) = 0.02237 s-1
+// (same internalField k, epsilon as case 72's kEpsilon setup)
+dimensions      [0 0 -1 0 0 0 0];
+
+internalField   uniform 0.02237;
+
+boundaryField
+{
+    left
+    {
+        type            symmetryPlane;
+    }
+    right
+    {
+        type            inletOutlet;
+        inletValue      $internalField;
+        value           $internalField; //placeholder
+    }
+    front
+    {
+        type            inletOutlet;
+        inletValue      $internalField;
+        value           $internalField; //placeholder
+    }
+    back
+    {
+        type            inletOutlet;
+        inletValue      $internalField;
+        value           $internalField; //placeholder
+    }
+    bottom_wall
+    {
+        type            omegaWallFunction;
+        value           $internalField;
+    }
+    top
+    {
+        type            inletOutlet;
+        inletValue      $internalField;
+        value           $internalField; //placeholder
+    }
+    nozzle_4mm_3mm_27cm
+    {
+        type            omegaWallFunction;
+        value           $internalField;
+    }
+    nozzle
+    {
+        // L = 0.07 x D = 0.07 x 4mm = 2.8e-4 m, same as case 72's epsilon.
+        type            turbulentMixingLengthFrequencyInlet;
+        mixingLength    2.80e-4;
+        phi             phi;
+        k               k;
+        value           uniform 0.02237; //$internalField;
+    }
+    box_shell_2m3
+    {
+        type            omegaWallFunction;
+        value           $internalField;
+    }
+}
+// ************************************************************************* //

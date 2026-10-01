@@ -1,0 +1,76 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2406                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    object      k;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 2 -2 0 0 0 0];
+
+internalField   uniform 1.50e-6;  //updated 
+
+boundaryField
+{
+    left
+    {
+        type            symmetryPlane;
+    }
+    right
+    {
+        type            inletOutlet;
+        inletValue      $internalField;
+        value           $internalField; //placeholder
+    }
+    front
+    {
+        type            inletOutlet;
+        inletValue      $internalField;
+        value           $internalField; //placeholder
+    }
+    back
+    {
+        type            inletOutlet;
+        inletValue      $internalField;
+        value           $internalField; //placeholder
+    }
+    bottom_wall
+    {
+        type            kqRWallFunction;
+        value           $internalField;
+    }
+    top
+    {
+        type            inletOutlet;
+        inletValue      $internalField;
+        value           $internalField; //placeholder
+    }
+    nozzle_27mm_5mm_27cm
+    {
+        type            kqRWallFunction;
+        value           $internalField;
+    }
+    nozzle
+    {
+        // Auto-scales with instantaneous U — always consistent with
+        // U ramp in 0.orig/U. Avoids quadratic/linear mismatch of
+        // explicit tables during the 0→6.65 m/s ramp (I=0.05).
+        type            turbulentIntensityKineticEnergyInlet;
+        intensity       0.05;
+        value           uniform 1.50e-6;
+    }
+    box_shell_2m3
+    {
+        type            kqRWallFunction;
+        value           $internalField;
+    }
+}
+// ************************************************************************* //

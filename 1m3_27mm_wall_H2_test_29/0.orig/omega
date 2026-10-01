@@ -1,0 +1,76 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2406                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    object      omega;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+// omega = epsilon / (Cmu * k) = 2.76e-6 / (0.09 * 3.75e-5) = 0.818 s-1
+dimensions      [0 0 -1 0 0 0 0];
+
+internalField   uniform 0.818;
+
+boundaryField
+{
+    left
+    {
+        type            symmetryPlane;
+    }
+    right
+    {
+        type            inletOutlet;
+        inletValue      $internalField;
+        value           $internalField;
+    }
+    front
+    {
+        type            inletOutlet;
+        inletValue      $internalField;
+        value           $internalField;
+    }
+    back
+    {
+        type            inletOutlet;
+        inletValue      $internalField;
+        value           $internalField;
+    }
+    bottom_wall
+    {
+        type            omegaWallFunction;
+        value           $internalField;
+    }
+    top
+    {
+        type            inletOutlet;
+        inletValue      $internalField;
+        value           $internalField;
+    }
+    nozzle_27mm_5mm_m
+    {
+        type            omegaWallFunction;
+        value           $internalField;
+    }
+    nozzle
+    {
+        type            turbulentMixingLengthFrequencyInlet;
+        mixingLength    1.03e-3;
+        phi             phi;
+        k               k;
+        value           uniform 1390;
+    }
+    box_shell_m
+    {
+        type            omegaWallFunction;
+        value           $internalField;
+    }
+}
+// ************************************************************************* //
