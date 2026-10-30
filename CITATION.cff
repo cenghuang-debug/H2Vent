@@ -1,0 +1,41 @@
+cff-version: 1.2.0
+message: "If you use these case setups or the solver, please cite the paper below."
+title: "H2Vent: OpenFOAM case setups and solver for \"Benchmarking Hydrogen Dispersion CFD Simulations Using OpenFOAM\""
+type: software
+authors:
+  - family-names: Huang
+    given-names: Chen
+    affiliation: RISE Research Institutes of Sweden
+    orcid: "https://orcid.org/0000-0002-6175-6595"
+  - family-names: Dahlbom
+    given-names: Sixten
+    affiliation: RISE Research Institutes of Sweden
+    orcid: "https://orcid.org/0000-0001-9432-0264"
+  - family-names: Gehandler
+    given-names: Jonatan
+    affiliation: RISE Research Institutes of Sweden
+    orcid: "https://orcid.org/0000-0001-8548-657X"
+  - family-names: Arymbayeva
+    given-names: Adina
+    affiliation: RISE Research Institutes of Sweden
+repository-code: "https://github.com/cenghuang-debug/H2Vent"
+doi: 10.5281/zenodo.23082550
+license: MIT
+preferred-citation:
+  type: article
+  title: "Benchmarking Hydrogen Dispersion CFD Simulations Using OpenFOAM"
+  authors:
+    - family-names: Huang
+      given-names: Chen
+    - family-names: Dahlbom
+      given-names: Sixten
+    - family-names: Gehandler
+      given-names: Jonatan
+    - family-names: Arymbayeva
+      given-names: Adina
+  journal: Energies
+  year: 2026
+  volume: 19
+  issue: 20
+  start: 4930
+  doi: 10.3390/en19204930

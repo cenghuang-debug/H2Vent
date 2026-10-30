@@ -2,13 +2,32 @@
 
 OpenFOAM v2406 case setups and the modified solver used for:
 
-> Huang, C., Dahlbom, S., Gehandler, J., Arymbayeva, A. *Benchmarking Hydrogen Dispersion CFD
-> Simulations Using OpenFOAM.* Submitted to Energies (MDPI), 2026.
+> Huang, C.; Dahlbom, S.; Gehandler, J.; Arymbayeva, A. Benchmarking Hydrogen Dispersion CFD
+> Simulations Using OpenFOAM. *Energies* **2026**, *19*, 4930.
+> https://doi.org/10.3390/en19204930
 
 Hydrogen dispersion in naturally ventilated enclosures is simulated with the compressible,
 buoyancy-driven, multi-species solver `rhoReactingBuoyantFoam` (passive dispersion, no
 combustion; species air + H₂) and validated against the two-vent enclosure experiments of
 Bernard-Michel and Houssin-Agbomson (2017).
+
+## How to cite
+
+If you use these case setups or the solver, please cite the paper above. The repository itself
+is archived on Zenodo: https://doi.org/10.5281/zenodo.23082550 (all versions).
+
+```bibtex
+@article{Huang2026H2Vent,
+  author  = {Huang, Chen and Dahlbom, Sixten and Gehandler, Jonatan and Arymbayeva, Adina},
+  title   = {Benchmarking Hydrogen Dispersion {CFD} Simulations Using {OpenFOAM}},
+  journal = {Energies},
+  year    = {2026},
+  volume  = {19},
+  number  = {20},
+  pages   = {4930},
+  doi     = {10.3390/en19204930}
+}
+```
 
 ## Repository scope
 

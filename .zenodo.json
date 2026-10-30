@@ -1,0 +1,50 @@
+{
+  "title": "H2Vent: OpenFOAM case setups and solver for \"Benchmarking Hydrogen Dispersion CFD Simulations Using OpenFOAM\"",
+  "upload_type": "software",
+  "description": "OpenFOAM v2406 case setups (mesh generation dictionaries, STL surfaces, initial and boundary conditions, thermophysical and turbulence properties, solver settings) and the modified solver rhoReactingBuoyantFoamSc used for the hydrogen dispersion validation study published in Energies 2026, 19, 4930 (https://doi.org/10.3390/en19204930). The cases simulate passive hydrogen dispersion in naturally ventilated 1 m³ and 2 m³ two-vent enclosures and are validated against the experiments of Bernard-Michel and Houssin-Agbomson (2017).",
+  "creators": [
+    {
+      "name": "Huang, Chen",
+      "affiliation": "RISE Research Institutes of Sweden",
+      "orcid": "0000-0002-6175-6595"
+    },
+    {
+      "name": "Dahlbom, Sixten",
+      "affiliation": "RISE Research Institutes of Sweden",
+      "orcid": "0000-0001-9432-0264"
+    },
+    {
+      "name": "Gehandler, Jonatan",
+      "affiliation": "RISE Research Institutes of Sweden",
+      "orcid": "0000-0001-8548-657X"
+    },
+    {
+      "name": "Arymbayeva, Adina",
+      "affiliation": "RISE Research Institutes of Sweden"
+    }
+  ],
+  "keywords": [
+    "hydrogen dispersion",
+    "hydrogen safety",
+    "OpenFOAM",
+    "RANS turbulence modelling",
+    "natural ventilation",
+    "hydrogen stratification",
+    "CFD validation"
+  ],
+  "license": "mit",
+  "related_identifiers": [
+    {
+      "identifier": "10.3390/en19204930",
+      "relation": "isSupplementTo",
+      "resource_type": "publication-article",
+      "scheme": "doi"
+    },
+    {
+      "identifier": "10.1016/j.ijhydene.2016.05.217",
+      "relation": "references",
+      "resource_type": "publication-article",
+      "scheme": "doi"
+    }
+  ]
+}
